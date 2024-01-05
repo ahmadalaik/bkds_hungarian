@@ -217,7 +217,7 @@ with tab1:
     if predict_btn:
         inputs = [[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak]]
         scaler_norm = scaler.transform(inputs)
-        prediction = model.predict(inputs)[0]
+        prediction = model.predict(scaler_norm)
 
         bar = st.progress(0)
         status_text = st.empty()
