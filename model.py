@@ -2,6 +2,7 @@ import itertools
 import pandas as pd
 import numpy as np
 from imblearn.over_sampling import SMOTE
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import accuracy_score
 import streamlit as st
 import time
@@ -84,12 +85,15 @@ X = df_clean.drop("target", axis=1)
 y = df_clean['target']
 
 smote = SMOTE(random_state=42)
-X, y = smote.fit_resample(X, y)
+X_smote, y_smote = smote.fit_resample(X, y)
+
+scaler = MinMaxScaler()
+X_smote_norm = scaler.fit_transform(X_smote)
 
 model = pickle.load(open("model/knn_model.pkl", "rb"))
 
-y_pred = model.predict(X)
-accuracy = round((accuracy_score(y, y_pred)*100), 2)
+y_pred = model.predict(X_smote_norm)
+accuracy = round((accuracy_score(y_smote, y_pred)*100), 2)
 
 df_final = X
 df_final['target'] = y
