@@ -216,10 +216,13 @@ with tab1:
     st.write("")
     if predict_btn:
         inputs = [[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak]]
+        scaler_norm = scaler.transform(inputs)
         prediction = model.predict(inputs)[0]
 
         bar = st.progress(0)
         status_text = st.empty()
+
+        # st.write(scaler_norm)
 
         for i in range(1, 101):
             status_text.text(f"{i}% complete")
@@ -260,7 +263,9 @@ with tab2:
 
     if file_uploaded:
         uploaded_df = pd.read_csv(file_uploaded)
-        prediction_arr = model.predict(uploaded_df)
+        uploaded_scaler = scaler.transform(uploaded_df)
+        # prediction_arr = model.predict(uploaded_df)
+        prediction_arr = model.predict(uploaded_scaler)
 
         bar = st.progress(0)
         status_text = st.empty()
